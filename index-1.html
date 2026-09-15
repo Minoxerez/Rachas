@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mis rachas</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mis rachas">
+<meta name="theme-color" content="#E3E8E2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141B19" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪷</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E3E8E2; --paper:#EEF1EC; --ink:#2C3833; --soft:#6B7A73;
+  --moss:#5E7858; --sand:#B39C74; --mist:#8BA1A6; --line:#CCD5CD; --track:#D6DED6;
+  --warn:#9B5B4B;
+  --serif:"Shippori Mincho","Hiragino Mincho ProN",Georgia,serif;
+  --sans:"Zen Kaku Gothic New",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141B19; --paper:#1B2421; --ink:#E3E8E2; --soft:#98A69F;
+    --moss:#8FAE87; --sand:#CDB78F; --mist:#9DB4B9; --line:#2A3531; --track:#26302C; --warn:#DE9483;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141B19; --paper:#1B2421; --ink:#E3E8E2; --soft:#98A69F;
+  --moss:#8FAE87; --sand:#CDB78F; --mist:#9DB4B9; --line:#2A3531; --track:#26302C; --warn:#DE9483;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(60% 40% at 50% 0%, color-mix(in srgb,var(--mist) 18%,transparent), transparent 70%),
+             radial-gradient(50% 35% at 50% 100%, color-mix(in srgb,var(--moss) 12%,transparent), transparent 70%)}
+main{position:relative;max-width:640px;margin:0 auto;padding:max(2.5rem,env(safe-area-inset-top)) 1.25rem 4rem}
+
+/* Frase del día */
+.quote{text-align:center;padding:1rem .5rem 2.5rem}
+.lotus{width:44px;height:44px;margin:0 auto 1rem;color:var(--moss);opacity:.85}
+.date{color:var(--soft);font-size:.85rem;margin-bottom:1.25rem;letter-spacing:.04em}
+.quote p{font-family:var(--serif);font-weight:500;font-size:clamp(1.3rem,4.4vw,1.75rem);line-height:1.65;margin:0 auto;max-width:26ch;text-wrap:balance}
+.quote cite{display:block;margin-top:1rem;font-style:normal;color:var(--sand);font-size:.92rem}
+
+/* Contadores */
+.counter{padding:2rem 0 2.25rem;text-align:center;border-top:1px solid var(--line)}
+.counter h2{font-family:var(--serif);font-weight:600;font-size:1.2rem;margin:0 0 1.25rem;letter-spacing:.03em}
+.ring{position:relative;width:220px;height:220px;margin:0 auto}
+.ring svg{display:block;transform:rotate(-90deg)}
+.ring .prog{transition:stroke-dashoffset 1s ease}
+.ring .inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.days{font-family:var(--serif);font-weight:600;font-size:4.4rem;line-height:1}
+.dlabel{color:var(--soft);font-size:.9rem;margin-top:.2rem}
+.time{display:flex;justify-content:center;gap:1.5rem;margin:1.1rem 0 .4rem}
+.time div{min-width:3.2rem}
+.time b{display:block;font-family:var(--serif);font-weight:500;font-size:1.7rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.time span{font-size:.78rem;color:var(--soft)}
+.meta{color:var(--soft);font-size:.86rem;margin:.6rem 0 .2rem}
+.best{font-size:.92rem;margin:.2rem 0 1.25rem}
+.best strong{color:var(--sand);font-weight:700}
+
+.actions{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
+button{font:inherit;font-weight:500;border-radius:999px;padding:.6rem 1.15rem;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:active{transform:scale(.98)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--mist);outline-offset:2px}
+button.primary{background:var(--moss);color:var(--paper);border-color:var(--moss)}
+button.quiet{color:var(--soft)}
+button.warn{color:var(--warn)}
+.sos{display:block;width:100%;max-width:340px;margin:0 auto 1.1rem;padding:.95rem 1rem;border-radius:18px;
+  background:var(--paper);border:1px solid color-mix(in srgb,var(--moss) 45%,var(--line));color:var(--ink);font-weight:700}
+.sos small{display:block;font-weight:400;color:var(--soft);font-size:.8rem}
+
+.panel{max-width:360px;margin:1.1rem auto 0;padding:1rem;background:var(--paper);border-radius:16px;text-align:left;font-size:.92rem}
+.panel[hidden]{display:none}
+.panel p{margin:0 0 .75rem}
+.panel input{font:inherit;width:100%;padding:.5rem .65rem;margin-bottom:.8rem;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.footer{text-align:center;color:var(--soft);font-size:.85rem;margin-top:1.5rem;font-family:var(--serif)}
+
+/* Pantalla de ayuda */
+.overlay{position:fixed;inset:0;z-index:10;background:var(--bg);overflow-y:auto;display:none}
+.overlay.open{display:block;animation:fade .5s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.ov-inner{max-width:520px;margin:0 auto;padding:max(2rem,env(safe-area-inset-top)) 1.4rem 3rem;text-align:center}
+.breath{position:relative;width:210px;height:210px;margin:1rem auto 1.25rem;display:flex;align-items:center;justify-content:center}
+.breath .orb{position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 50% 45%, color-mix(in srgb,var(--moss) 35%,transparent), color-mix(in srgb,var(--mist) 12%,transparent) 70%);
+  transform:scale(.55);transition:transform 4s ease-in-out}
+.breath .orb.in{transform:scale(1)}
+.breath .orb.hold{transform:scale(1)}
+.breath .orb.out{transform:scale(.55);transition-duration:6s}
+.breath .word{position:relative;font-family:var(--serif);font-size:1.3rem}
+.ov-msg{font-family:var(--serif);font-size:clamp(1.2rem,4.2vw,1.45rem);line-height:1.7;margin:0 auto 1rem;max-width:28ch;text-wrap:balance}
+.ov-streak{color:var(--soft);font-size:.95rem;margin:0 0 1.5rem}
+.ov-streak strong{color:var(--sand)}
+.steps{list-style:none;padding:0;margin:0 auto 1.75rem;max-width:360px;text-align:left}
+.steps li{padding:.7rem 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.steps li:last-child{border-bottom:0}
+.wait{font-family:var(--serif);font-size:2rem;margin:.25rem 0 .3rem;font-variant-numeric:tabular-nums}
+.waitlabel{color:var(--soft);font-size:.85rem;margin-bottom:1.5rem}
+.ov-actions{display:flex;flex-direction:column;gap:.7rem;align-items:center}
+.ov-actions button{min-width:240px}
+
+@media (prefers-reduced-motion: reduce){
+  .ring .prog,.breath .orb{transition:none}
+  .overlay.open{animation:none}
+}
+</style>
+</head>
+<body>
+<main>
+  <section class="quote">
+    <svg class="lotus" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+      <path d="M32 50c-6-6-8-14-8-20 3 2 6 5 8 9 2-4 5-7 8-9 0 6-2 14-8 20z"/>
+      <path d="M32 50c-9-2-17-8-20-15 5 0 10 2 14 5"/>
+      <path d="M32 50c9-2 17-8 20-15-5 0-10 2-14 5"/>
+      <path d="M14 54h36"/>
+    </svg>
+    <div class="date" id="today"></div>
+    <p id="qText"></p>
+    <cite id="qAuthor"></cite>
+  </section>
+
+  <div id="counters"></div>
+
+  <p class="footer">Si caes, te levantas. La racha se reinicia; tu camino, no.</p>
+</main>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="ovMsg">
+  <div class="ov-inner">
+    <div class="breath" aria-hidden="true">
+      <div class="orb" id="orb"></div>
+      <div class="word" id="breathWord">Respira</div>
+    </div>
+    <p class="ov-msg" id="ovMsg"></p>
+    <p class="ov-streak" id="ovStreak"></p>
+    <ul class="steps" id="ovSteps"></ul>
+    <div class="wait" id="wait">10:00</div>
+    <div class="waitlabel">Las ganas suben y bajan como una ola. Deja que pasen estos 10 minutos.</div>
+    <div class="ov-actions">
+      <button class="primary" id="ovDone">Ya pasó, sigo firme</button>
+      <button class="quiet" id="ovOther">Dame otro mensaje</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUOTES = [
+ ["Quien mira hacia fuera, sueña; quien mira hacia dentro, despierta.","Carl Jung"],
+ ["Uno no se ilumina imaginando figuras de luz, sino haciendo consciente la oscuridad.","Carl Jung"],
+ ["Hasta que no hagas consciente lo inconsciente, dirigirá tu vida y lo llamarás destino.","Carl Jung"],
+ ["Tu visión se aclarará solo cuando mires dentro de tu corazón.","Carl Jung"],
+ ["Conoceréis la verdad, y la verdad os hará libres.","Jesús · Juan 8:32"],
+ ["Bienaventurados los limpios de corazón, porque ellos verán a Dios.","Jesús · Mateo 5:8"],
+ ["Velad y orad para no caer en tentación; el espíritu está dispuesto, pero la carne es débil.","Jesús · Mateo 26:41"],
+ ["No os afanéis por el mañana, que el mañana traerá su propio afán.","Jesús · Mateo 6:34"],
+ ["Pedid y se os dará; buscad y hallaréis; llamad y se os abrirá.","Jesús · Mateo 7:7"],
+ ["La lámpara del cuerpo es el ojo; si tu ojo es sano, todo tu cuerpo estará lleno de luz.","Jesús · Mateo 6:22"],
+ ["Venid a mí todos los que estáis cansados y cargados, y yo os haré descansar.","Jesús · Mateo 11:28"],
+ ["Mejor que conquistar mil veces a mil hombres es conquistarse a uno mismo.","Buda · Dhammapada"],
+ ["Somos lo que pensamos. Todo lo que somos surge con nuestros pensamientos.","Buda · Dhammapada"],
+ ["Como la lluvia entra en una casa mal techada, el deseo entra en una mente no cultivada.","Buda · Dhammapada"],
+ ["Nadie nos salva sino nosotros mismos. Nosotros debemos recorrer el camino.","Buda"],
+ ["Gota a gota se llena el cántaro; poco a poco el sabio se llena de bien.","Buda · Dhammapada"],
+ ["Quien conoce a los demás es sabio; quien se conoce a sí mismo es iluminado.","Lao Tse"],
+ ["Quien vence a otros es fuerte; quien se vence a sí mismo es poderoso.","Lao Tse"],
+ ["Un viaje de mil millas comienza con un solo paso.","Lao Tse"],
+ ["La herida es el lugar por donde entra la luz.","Rumi"],
+ ["Lo que buscas te está buscando.","Rumi"],
+ ["Tienes poder sobre tu mente, no sobre lo que sucede fuera. Date cuenta y encontrarás la fuerza.","Marco Aurelio"],
+ ["No es libre quien no es dueño de sí mismo.","Epicteto"],
+ ["Gobernarse a sí mismo es el mayor de los gobiernos.","Séneca"],
+ ["Nuestro corazón está inquieto hasta que descansa en ti.","San Agustín"],
+ ["Nada te turbe, nada te espante; la paciencia todo lo alcanza.","Santa Teresa de Jesús"],
+ ["Mejor es el que domina su espíritu que el que conquista una ciudad.","Proverbios 16:32"],
+ ["Todo lo puedo en aquel que me fortalece.","San Pablo · Filipenses 4:13"],
+ ["Al atardecer de la vida se nos examinará en el amor.","San Juan de la Cruz"]
+];
+
+const HELP = {
+  porno:{
+    msgs:[
+      "Lo que ves en esa pantalla no es real ni te llena. Mañana te traerá vacío. Hoy puedes elegir paz.",
+      "Esto son unos minutos de impulso contra días de claridad. Tú ya sabes qué vale más.",
+      "No necesitas imágenes ajenas. Necesitas volver a ti. Cierra, respira, sal de esa habitación.",
+      "Cada vez que dices no, tu mente se libera un poco más. Esta es una de esas veces.",
+      "Tu mirada es sagrada. Protégela como protegerías a alguien que quieres.",
+      "El deseo te promete alivio, pero el alivio de verdad llega cuando lo dejas pasar."
+    ],
+    steps:["Deja el móvil en otra habitación o bloquéalo ahora mismo.","Levántate y cambia de sitio: sal a la calle, a la terraza o a la cocina.","Bebe un vaso de agua despacio.","Escribe o llama a alguien, aunque sea para hablar de otra cosa."]
+  },
+  mast:{
+    msgs:[
+      "Tu energía es valiosa. Guárdala y conviértela en fuerza, creatividad y presencia.",
+      "No es tu cuerpo quien manda, eres tú. Respira y recuerda quién decide.",
+      "Este impulso es solo una ola. Sube, llega arriba y baja. Quédate quieto y mírala pasar.",
+      "Suele venir del cansancio, el estrés o la soledad. Pregúntate qué necesitas de verdad ahora.",
+      "Cada vez que resistes, te haces un poco más dueño de ti mismo.",
+      "Transforma esta energía: muévete, crea, escribe, canta. Dale un cauce que te haga crecer."
+    ],
+    steps:["Levántate de la cama o del sofá ahora mismo.","Haz 20 sentadillas o flexiones para mover esa energía.","Date una ducha, mejor con agua fresca al final.","Ponte con algo creativo durante 10 minutos: escribir, ensayar, leer."]
+  }
+};
+
+const COUNTERS=[
+  {key:"porno",title:"Sin ver porno",color:"var(--moss)",sos:"Tengo ganas de ver porno"},
+  {key:"mast",title:"Sin masturbarme",color:"var(--mist)",sos:"Tengo ganas de masturbarme"}
+];
+const MIN=60000,HOUR=3600000,DAY=86400000,LS="rachas-v1",R=96,CIRC=2*Math.PI*R;
+const MILESTONES=[1,3,7,14,21,30,60,90,180,365,730,1095];
+
+let state={porno:{start:null,best:0},mast:{start:null,best:0}};
+try{const s=localStorage.getItem(LS); if(s){const d=JSON.parse(s); for(const k of ["porno","mast"]) if(d[k]) state[k]={start:d[k].start??null,best:d[k].best||0};}}catch(e){}
+// Versión anterior guardaba la mejor racha en días
+for(const k of ["porno","mast"]) if(state[k].best>0 && state[k].best<100000) state[k].best*=DAY;
+
+function save(){try{localStorage.setItem(LS,JSON.stringify(state));}catch(e){}}
+function elapsed(c){return c.start?Math.max(0,Date.now()-c.start):0;}
+function parts(ms){return{d:Math.floor(ms/DAY),h:Math.floor(ms%DAY/HOUR),m:Math.floor(ms%HOUR/MIN),s:Math.floor(ms%MIN/1000)};}
+function pad(n){return String(n).padStart(2,"0");}
+function plural(n,a,b){return n===1?a:b;}
+function durText(ms){const p=parts(ms); if(p.d>0) return `${p.d} ${plural(p.d,"día","días")} y ${p.h} h`; if(p.h>0) return `${p.h} h y ${p.m} min`; return `${p.m} min`;}
+function fmtDate(ms){return new Date(ms).toLocaleDateString("es-ES",{day:"numeric",month:"long",year:"numeric"});}
+function toInput(ms){const d=new Date(ms); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,16);}
+
+function renderQuote(){
+  const now=new Date(), doy=Math.floor((now-new Date(now.getFullYear(),0,0))/DAY);
+  const [t,a]=QUOTES[(doy*7+now.getFullYear())%QUOTES.length];
+  document.getElementById("qText").textContent=t;
+  document.getElementById("qAuthor").textContent=a;
+  const d=now.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});
+  document.getElementById("today").textContent=d.charAt(0).toUpperCase()+d.slice(1);
+}
+
+function build(){
+  const wrap=document.getElementById("counters");
+  wrap.innerHTML="";
+  for(const c of COUNTERS){
+    const el=document.createElement("section");
+    el.className="counter"; el.id="c-"+c.key;
+    el.innerHTML=`
+      <h2>${c.title}</h2>
+      <div class="ring">
+        <svg width="220" height="220" viewBox="0 0 220 220" aria-hidden="true">
+          <circle cx="110" cy="110" r="${R}" fill="none" stroke="var(--track)" stroke-width="5"/>
+          <circle class="prog" cx="110" cy="110" r="${R}" fill="none" stroke="${c.color}" stroke-width="5" stroke-linecap="round" stroke-dasharray="${CIRC}" stroke-dashoffset="${CIRC}"/>
+        </svg>
+        <div class="inner"><div class="days">0</div><div class="dlabel">días</div></div>
+      </div>
+      <div class="time">
+        <div><b class="h">00</b><span>horas</span></div>
+        <div><b class="m">00</b><span>minutos</span></div>
+        <div><b class="s">00</b><span>segundos</span></div>
+      </div>
+      <p class="meta"></p>
+      <p class="best"></p>
+      <button class="sos">${c.sos}<small>Pulsa aquí antes de caer</small></button>
+      <div class="actions"></div>
+      <div class="panel" hidden></div>`;
+    el.querySelector(".sos").onclick=()=>openHelp(c.key);
+    wrap.appendChild(el);
+  }
+  renderAll();
+}
+
+function renderAll(){
+  for(const c of COUNTERS){
+    const s=state[c.key], el=document.getElementById("c-"+c.key), ms=elapsed(s), p=parts(ms);
+    el.querySelector(".days").textContent=p.d;
+    el.querySelector(".dlabel").textContent=plural(p.d,"día","días");
+    el.querySelector(".h").textContent=pad(p.h);
+    el.querySelector(".m").textContent=pad(p.m);
+    el.querySelector(".s").textContent=pad(p.s);
+    const exact=ms/DAY;
+    const lo=[0,...MILESTONES].filter(m=>m<=exact).pop();
+    const hi=MILESTONES.find(m=>m>exact)||Math.ceil((exact+1)/365)*365;
+    el.querySelector(".prog").style.strokeDashoffset=s.start?CIRC*(1-(exact-lo)/(hi-lo)):CIRC;
+    const best=Math.max(s.best||0,ms);
+    el.querySelector(".best").innerHTML=`Mejor racha: <strong>${durText(best)}</strong>`;
+    const meta=el.querySelector(".meta"), actions=el.querySelector(".actions");
+    const mode=s.start?"on":"off";
+    if(actions.dataset.mode!==mode){
+      actions.dataset.mode=mode;
+      actions.innerHTML=s.start
+        ?`<button class="warn" data-a="reset">Reiniciar</button><button class="quiet" data-a="edit">Cambiar fecha</button>`
+        :`<button class="primary" data-a="start">Empezar ahora</button><button class="quiet" data-a="edit">Elegir fecha</button>`;
+      actions.querySelectorAll("button").forEach(b=>b.onclick=()=>act(c.key,b.dataset.a));
+    }
+    meta.textContent=s.start?`Desde el ${fmtDate(s.start)} · próxima meta: ${hi} ${plural(hi,"día","días")}`:"Aún no has empezado esta racha.";
+  }
+}
+
+function act(key,a){
+  const el=document.getElementById("c-"+key), panel=el.querySelector(".panel"), s=state[key];
+  if(a==="start"){s.start=Date.now(); save(); renderAll(); return;}
+  panel.hidden=false;
+  if(a==="reset"){
+    panel.innerHTML=`<p>¿Empezar de nuevo desde cero? Llevas ${durText(elapsed(s))}; si es tu mejor racha, quedará guardada.</p>
+      <div class="actions"><button class="primary" data-x="ok">Sí, empiezo de nuevo</button><button class="quiet" data-x="no">Cancelar</button></div>`;
+  }else{
+    panel.innerHTML=`<p>¿Cuándo empezaste esta racha?</p>
+      <input type="datetime-local" value="${toInput(s.start||Date.now())}" max="${toInput(Date.now())}">
+      <div class="actions"><button class="primary" data-x="date">Guardar</button><button class="quiet" data-x="no">Cancelar</button></div>`;
+  }
+  panel.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    if(b.dataset.x==="ok"){s.best=Math.max(s.best||0,elapsed(s)); s.start=Date.now(); save();}
+    if(b.dataset.x==="date"){const v=panel.querySelector("input").value; const t=v?new Date(v).getTime():NaN;
+      if(!isNaN(t)){s.start=Math.min(t,Date.now()); s.best=Math.max(s.best||0,elapsed(s)); save();}}
+    panel.hidden=true; panel.innerHTML=""; renderAll();
+  });
+}
+
+/* Pantalla de ayuda */
+let helpKey=null, lastMsg=-1, waitEnd=0, breathTimer=null;
+const ov=document.getElementById("overlay");
+function showMsg(){
+  const list=HELP[helpKey].msgs; let i;
+  do{i=Math.floor(Math.random()*list.length);}while(i===lastMsg && list.length>1);
+  lastMsg=i;
+  document.getElementById("ovMsg").textContent=list[i];
+}
+function openHelp(key){
+  helpKey=key; lastMsg=-1; showMsg();
+  const s=state[key];
+  document.getElementById("ovStreak").innerHTML=s.start
+    ?`Llevas <strong>${durText(elapsed(s))}</strong>. No lo cambies por unos minutos.`
+    :`Hoy puede ser el primer día.`;
+  document.getElementById("ovSteps").innerHTML=HELP[key].steps.map(t=>`<li>${t}</li>`).join("");
+  waitEnd=Date.now()+10*MIN;
+  ov.classList.add("open"); ov.scrollTop=0; document.body.style.overflow="hidden";
+  startBreath();
+}
+function closeHelp(){ov.classList.remove("open"); document.body.style.overflow=""; clearTimeout(breathTimer);}
+function startBreath(){
+  const orb=document.getElementById("orb"), w=document.getElementById("breathWord");
+  const phases=[["in","Inspira",4000],["hold","Mantén",2000],["out","Suelta",6000]];
+  let i=0;
+  (function step(){
+    if(!ov.classList.contains("open")) return;
+    const [cls,word,dur]=phases[i%3];
+    orb.className="orb "+cls; w.textContent=word; i++;
+    breathTimer=setTimeout(step,dur);
+  })();
+}
+document.getElementById("ovDone").onclick=closeHelp;
+document.getElementById("ovOther").onclick=showMsg;
+
+function tick(){
+  renderAll();
+  if(ov.classList.contains("open")){
+    const left=Math.max(0,waitEnd-Date.now());
+    document.getElementById("wait").textContent=left?`${pad(Math.floor(left/MIN))}:${pad(Math.floor(left%MIN/1000))}`:"Lo lograste";
+  }
+}
+renderQuote(); build(); tick();
+setInterval(tick,1000);
+setInterval(renderQuote,60000);
+</script>
+</body>
+</html>
